@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "name": "Daily tasks extension by Sierra MacDonald",
+    "version": "1.0",
+    "description": "Use this extension to keep track of your daily tasks. Created for people like myself who benefit from visually being reminded of what their tasks are for the day.",
+    "author": "Sierra MacDonald",
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+    },
+    "permissions": [
+        "storage",
+        "https://api.hackernoon.com/"
+    ],
+    "icons": {
+        "16": "icon16.png",
+        "128": "icon128.png"
+    }
+}

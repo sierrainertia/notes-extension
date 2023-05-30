@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>New Tab</title>
+        <meta name="description" content="Fancy description..." />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+
+    <body>
+            <h2 contenteditable="true">Goals</h2>
+            <div class="taskBox">
+                <div class="textInputBox"x>
+                    <h3>Enter a task:</h3>
+                    <input 
+                        type="text" 
+                        class="taskInputField" 
+                        id="taskInputField">
+                </div>
+                <ul id="taskList">
+            </ul>
+            </div>
+        <script
+            src="https://kit.fontawesome.com/5283fb819f.js"
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            function addTask() {
+                const taskInputField = document.getElementById("taskInputField");
+                const taskList = document.getElementById("taskList");
+                const taskItem = document.getElementById("taskItem")
+                
+                const taskInputFieldValue = taskInputField.value.trim();
+
+                if (taskInputFieldValue === "") {
+                    return;
+                }
+
+                // Create a new list item
+                const taskLi = document.createElement("li");
+                taskLi.className = "taskLi"
+                
+                // Create checkbox element
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                taskLi.appendChild(checkbox);
+
+
+                // Create textbox element
+                const textbox = document.createElement("input");
+                textbox.type = "text";
+                textbox.value = taskInputFieldValue;
+                textbox.className = "taskInput";
+                taskLi.appendChild(textbox);
+
+                // Create delete button
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "delete";
+                const trashCan = document.createElement("i");
+                trashCan.className = "fa-regular fa-trash-can";
+                deleteButton.appendChild(trashCan);
+                taskLi.appendChild(deleteButton);
+
+                // Append the list item to the task list
+                taskList.appendChild(taskLi);
+                
+                // Clear the input field
+                taskInputField.value = "";
+                // Focus on the input field
+                taskInputField.focus();
+            }
+
+            // Add a listener to the input field for when the enter key is pressed
+            const taskInputField = document.getElementById("taskInputField");
+            taskInputField.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    addTask();
+                }
+            });
+        </script>
+    </body>
+</html>
