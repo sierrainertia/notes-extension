@@ -1,9 +1,10 @@
 X User can add tasks
-- User can remove tasks
+X User can remove tasks
 X User can mark tasks as completed
 X When task is completed it is striked out
 - Memory is persistent
 - It looks nice
+- User can add a new 'goals' box
 
 Checkbox logic
 if selected set box to filled and strike out, else keep it empty

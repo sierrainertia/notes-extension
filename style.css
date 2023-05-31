@@ -2,6 +2,29 @@ h3{
     margin: 0 5px 0 0;
 }
 
+.wrapper {
+  width: 1100px;
+  margin: 0 auto;
+  max-width: 90%;
+}
+
+.addNewContainer{
+    color: silver;
+}
+
+.addNewContainer:hover{
+    color: black;
+    cursor: pointer;
+}
+
+.container{
+    padding: 10px;
+    width: 50%;
+    border-width: 4px;
+    border: black;
+    border-style: solid;
+}
+
 .textInputBox{
     display: flex;
     margin-bottom: 10px;
@@ -16,6 +39,7 @@ h3{
 
 .taskLi{
     display:flex;
+    justify-content: space-between;
     margin-bottom: 7px;
 }
 

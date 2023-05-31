@@ -3,54 +3,77 @@
         <meta charset="utf-8" />
         <title>New Tab</title>
         <meta name="description" content="Fancy description..." />
+        <link
+            href="/node_modules/@fortawesome/fontawesome-free/css/all.css"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="style.css" />
     </head>
-
     <body>
-            <h2 contenteditable="true">Goals</h2>
-            <div class="taskBox">
-                <div class="textInputBox"x>
-                    <h3>Enter a task:</h3>
-                    <input 
-                        type="text" 
-                        class="taskInputField" 
-                        id="taskInputField">
+        <div class="wrapper">
+            <div class="container">
+                <h2 contenteditable="true">Goals</h2>
+                <div class="taskBox">
+                    <ul class="taskList">
+                        <li class="taskLi">
+                            <span class="checkboxAndInputField">
+                                <input type="checkbox" />
+                                <input class="taskInputField" type="text" />
+                            </span>
+                            <button class="delete">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </li>
+                        <li class="taskLi">
+                            <span class="checkboxAndInputField">
+                                <input type="checkbox" />
+                                <input class="taskInputField" type="text" />
+                            </span>
+                            <button class="delete">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </li>
+                        <li class="taskLi">
+                            <span class="checkboxAndInputField">
+                                <input type="checkbox" />
+                                <input class="taskInputField" type="text" />
+                            </span>
+                            <button class="delete">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-                <ul id="taskList">
-            </ul>
             </div>
-        <script
-            src="https://kit.fontawesome.com/5283fb819f.js"
-            crossorigin="anonymous"
-        ></script>
+            <button id="addNewContainer" class="addNewContainer">
+                <p>Add new list</p>
+            </button>
+        </div>
         <script>
-            function addTask() {
-                const taskInputField = document.getElementById("taskInputField");
-                const taskList = document.getElementById("taskList");
-                const taskItem = document.getElementById("taskItem")
-                
-                const taskInputFieldValue = taskInputField.value.trim();
+            let taskList;
 
-                if (taskInputFieldValue === "") {
-                    return;
-                }
-
+            function listItem(taskValue) {
                 // Create a new list item
                 const taskLi = document.createElement("li");
-                taskLi.className = "taskLi"
-                
+                taskLi.className = "taskLi";
+
+                // Create span for checkbox and text for styling
+                const span = document.createElement("span");
+                span.className = "checkboxAndInputField";
+
                 // Create checkbox element
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
-                taskLi.appendChild(checkbox);
 
+                // Create input element
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = taskValue;
+                input.className = "taskInputField";
 
-                // Create textbox element
-                const textbox = document.createElement("input");
-                textbox.type = "text";
-                textbox.value = taskInputFieldValue;
-                textbox.className = "taskInput";
-                taskLi.appendChild(textbox);
+                // Adding checkbox and input to span
+                span.appendChild(checkbox);
+                span.appendChild(input);
 
                 // Create delete button
                 const deleteButton = document.createElement("button");
@@ -58,24 +81,107 @@
                 const trashCan = document.createElement("i");
                 trashCan.className = "fa-regular fa-trash-can";
                 deleteButton.appendChild(trashCan);
+
+                // Append span and delete button to taskLi
+                taskLi.appendChild(span);
                 taskLi.appendChild(deleteButton);
 
-                // Append the list item to the task list
-                taskList.appendChild(taskLi);
-                
+                function attachDeleteListener() {
+                    deleteButton.addEventListener("click", function () {
+                        // Remove the parent <li> element from the DOM
+                        taskLi.parentNode.removeChild(taskLi);
+                    });
+                }
+
+                attachDeleteListener();
+
+                return taskLi;
+            }
+
+            function attachEventListenersToInputs() {
+                const taskInputFields =
+                    document.querySelectorAll(".taskInputField");
+
+                for (let i = 0; i < taskInputFields.length; i++) {
+                    taskInputFields[i].addEventListener(
+                        "keyup",
+                        function (event) {
+                            if (event.keyCode === 13) {
+                                event.preventDefault();
+                                addTask();
+                            }
+                        }
+                    );
+                }
+            }
+
+            function addNewContainer() {
+                console.log("this happened");
+                const containerDiv = document.createElement("div");
+                containerDiv.className = "container";
+
+                const h2 = document.createElement("h2");
+                h2.textContent = "Enter Text";
+                h2.contentEditable = "true";
+
+                containerDiv.appendChild(h2);
+
+                const taskBoxDiv = document.createElement("div");
+                taskBoxDiv.className = "taskBox";
+
+                const ul = document.createElement("ul");
+                ul.className = "taskList";
+
+                // Create three list items using listItem function and add them to the ul
+                for (let i = 0; i < 3; i++) {
+                    const taskLi = listItem("");
+                    ul.appendChild(taskLi);
+                }
+
+                taskBoxDiv.appendChild(ul);
+                containerDiv.appendChild(taskBoxDiv);
+
+                const wrapper = document.querySelector(".wrapper");
+                wrapper.appendChild(containerDiv);
+
+                attachEventListenersToInputs();
+            }
+
+            function addTask() {
+                const taskInputField = document.activeElement;
+                const taskInputFieldValue = taskInputField.value.trim();
+
+                if (taskInputFieldValue === "") {
+                    return;
+                }
+
+                const taskLi = listItem(taskInputFieldValue);
+
+                // Find the parent <ul> element of the active task input
+                const ul = taskInputField.closest("ul");
+
+                // Insert the new taskLi after the active task input's parent <li> element
+                ul.insertBefore(
+                    taskLi,
+                    taskInputField.closest("li").nextSibling
+                );
+
                 // Clear the input field
                 taskInputField.value = "";
                 // Focus on the input field
                 taskInputField.focus();
             }
 
-            // Add a listener to the input field for when the enter key is pressed
-            const taskInputField = document.getElementById("taskInputField");
-            taskInputField.addEventListener("keyup", function (event) {
-                if (event.keyCode === 13) {
-                    event.preventDefault();
-                    addTask();
-                }
+            const newContainer = document.getElementById("addNewContainer");
+            newContainer.addEventListener("click", function () {
+                console.log("you made it here");
+                event.preventDefault();
+                addNewContainer();
+            });
+
+            // Assign taskList variable after the DOM is loaded
+            window.addEventListener("DOMContentLoaded", function () {
+                attachEventListenersToInputs(); // Attach event listeners to the existing inputs
             });
         </script>
     </body>
