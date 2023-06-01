@@ -3,51 +3,76 @@
         <meta charset="utf-8" />
         <title>New Tab</title>
         <meta name="description" content="Fancy description..." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="/node_modules/@fortawesome/fontawesome-free/css/all.css"
+            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
             rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <div class="wrapper">
-            <div class="container">
-                <h2 contenteditable="true">Goals</h2>
-                <div class="taskBox">
-                    <ul class="taskList">
-                        <li class="taskLi">
-                            <span class="checkboxAndInputField">
-                                <input type="checkbox" />
-                                <input class="taskInputField" type="text" />
-                            </span>
-                            <button class="delete">
-                                <i class="fa-regular fa-trash-can"></i>
-                            </button>
-                        </li>
-                        <li class="taskLi">
-                            <span class="checkboxAndInputField">
-                                <input type="checkbox" />
-                                <input class="taskInputField" type="text" />
-                            </span>
-                            <button class="delete">
-                                <i class="fa-regular fa-trash-can"></i>
-                            </button>
-                        </li>
-                        <li class="taskLi">
-                            <span class="checkboxAndInputField">
-                                <input type="checkbox" />
-                                <input class="taskInputField" type="text" />
-                            </span>
-                            <button class="delete">
-                                <i class="fa-regular fa-trash-can"></i>
-                            </button>
-                        </li>
-                    </ul>
+            <div class="notesContainer">
+                <h1 contenteditable="true">Don't worry you've got this!</h1>
+                <div class="container">
+                    <h2 contenteditable="true">Goals</h2>
+                    <div class="taskBox">
+                        <ul class="taskList">
+                            <li class="taskLi">
+                                <span class="checkboxAndInputField">
+                                    <input type="checkbox" />
+                                    <input class="taskInputField" type="text" />
+                                </span>
+                                <button class="delete">
+                                    <span class="material-symbols-rounded"
+                                        >delete</span
+                                    >
+                                </button>
+                            </li>
+                            <li class="taskLi">
+                                <span class="checkboxAndInputField">
+                                    <input type="checkbox" />
+                                    <input class="taskInputField" type="text" />
+                                </span>
+                                <button class="delete">
+                                    <span class="material-symbols-rounded"
+                                        >delete</span
+                                    >
+                                </button>
+                            </li>
+                            <li class="taskLi">
+                                <span class="checkboxAndInputField">
+                                    <input type="checkbox" />
+                                    <input class="taskInputField" type="text" />
+                                </span>
+                                <button class="delete">
+                                    <span class="material-symbols-rounded"
+                                        >delete</span
+                                    >
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+                <button id="addNewContainer" class="addNewContainer">
+                    <p>Add new list</p>
+                </button>
             </div>
-            <button id="addNewContainer" class="addNewContainer">
-                <p>Add new list</p>
-            </button>
+
+            <div class="colourPicker">
+                <button class="colours colour1"></button>
+                <button class="colours colour2"></button>
+                <button class="colours colour3"></button>
+            </div>
         </div>
         <script>
             let taskList;
@@ -74,22 +99,24 @@
                 // Adding checkbox and input to span
                 span.appendChild(checkbox);
                 span.appendChild(input);
+                taskLi.appendChild(span);
 
                 // Create delete button
                 const deleteButton = document.createElement("button");
                 deleteButton.className = "delete";
-                const trashCan = document.createElement("i");
-                trashCan.className = "fa-regular fa-trash-can";
+                const trashCan = document.createElement("span");
+                trashCan.className = "material-symbols-rounded";
+                trashCan.textContent = "delete";
                 deleteButton.appendChild(trashCan);
 
-                // Append span and delete button to taskLi
-                taskLi.appendChild(span);
                 taskLi.appendChild(deleteButton);
 
                 function attachDeleteListener() {
                     deleteButton.addEventListener("click", function () {
                         // Remove the parent <li> element from the DOM
-                        taskLi.parentNode.removeChild(taskLi);
+                        if (taskLi.parentNode.children.length > 1) {
+                            taskLi.parentNode.removeChild(taskLi);
+                        }
                     });
                 }
 
@@ -101,6 +128,7 @@
             function attachEventListenersToInputs() {
                 const taskInputFields =
                     document.querySelectorAll(".taskInputField");
+                const deleteButtons = document.querySelectorAll(".delete");
 
                 for (let i = 0; i < taskInputFields.length; i++) {
                     taskInputFields[i].addEventListener(
@@ -113,12 +141,48 @@
                         }
                     );
                 }
+
+                for (let i = 0; i < deleteButtons.length; i++) {
+                    deleteButtons[i].addEventListener("click", function () {
+                        const taskLi = deleteButtons[i].closest(".taskLi");
+                        // Check if it is the last item
+                        if (taskLi.parentNode.children.length > 1) {
+                            // Remove the parent <li> element from the DOM
+                            taskLi.parentNode.removeChild(taskLi);
+                        } else {
+                            alert("Cannot delete the last item.");
+                        }
+                    });
+                }
+            }
+
+            function attachContainerDeleteListener(containerDiv) {
+                const containerDeleteButton = containerDiv.querySelector(
+                    ".containerDeleteButton"
+                );
+                containerDeleteButton.addEventListener("click", function () {
+                    containerDiv.parentNode.removeChild(containerDiv);
+                });
             }
 
             function addNewContainer() {
-                console.log("this happened");
                 const containerDiv = document.createElement("div");
                 containerDiv.className = "container";
+
+                const buttonContainer = document.createElement("div");
+                buttonContainer.className = "buttonContainer";
+
+                const containerDeleteButton = document.createElement("button");
+                containerDeleteButton.className = "containerDeleteButton";
+                const x = document.createElement("span");
+                x.className = "material-symbols-rounded";
+                x.textContent = "close";
+
+                containerDeleteButton.appendChild(x);
+                buttonContainer.appendChild(containerDeleteButton);
+                containerDiv.appendChild(buttonContainer);
+
+                attachContainerDeleteListener(containerDiv);
 
                 const h2 = document.createElement("h2");
                 h2.textContent = "Enter Text";
@@ -143,6 +207,10 @@
 
                 const wrapper = document.querySelector(".wrapper");
                 wrapper.appendChild(containerDiv);
+
+                const addNewContainerButton =
+                    document.getElementById("addNewContainer");
+                wrapper.insertBefore(containerDiv, addNewContainerButton);
 
                 attachEventListenersToInputs();
             }
