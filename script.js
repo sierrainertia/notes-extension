@@ -1,4 +1,23 @@
-let containerList = [];
+let containerList = [
+    {
+        id: "firstContainer",
+        title: "Goals",
+        tasks: [
+            {
+                value: "",
+                completed: false,
+            },
+            {
+                value: "",
+                completed: false,
+            },
+            {
+                value: "",
+                completed: false,
+            },
+        ],
+    },
+];
 
 function generateContainerId() {
     const timestamp = Date.now();
@@ -43,6 +62,22 @@ colourButtons.forEach(function (button) {
     });
 });
 
+function saveState() {
+    //get innerhtml of wrapper
+    const bodyHtml = document.body.innerHTML;
+
+    //save html
+    chrome.storage.local.set({ bodyHtml });
+}
+
+function loadState() {
+    //load html
+    chrome.storage.local.get("bodyHtml", (items) => {
+        console.log(items);
+    });
+    //set html
+}
+
 function listItem(taskValue) {
     // Create a new list item
     const taskLi = document.createElement("li");
@@ -63,7 +98,7 @@ function listItem(taskValue) {
     input.className = "taskInputField";
 
     input.addEventListener("input", function () {
-        task.value = input.value;
+        saveState();
     });
 
     // Adding checkbox and input to span
@@ -211,9 +246,10 @@ function addTask() {
     const containerIndex = Array.from(containerDiv.parentNode.children).indexOf(
         containerDiv
     );
-    containerList[containerIndex].tasks.push(task);
 
-    containerList(task);
+    console.log(containerList);
+    console.log(containerIndex);
+    containerList[containerIndex - 1].tasks.push(task);
 
     const taskLi = listItem(taskInputFieldValue);
 
@@ -239,5 +275,6 @@ newContainer.addEventListener("click", function () {
 // Assign taskList variable after the DOM is loaded
 window.addEventListener("DOMContentLoaded", function () {
     attachEventListenersToInputs(); // Attach event listeners to the existing inputs
+    loadState();
     createCalendar();
 });
