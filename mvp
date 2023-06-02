@@ -4,8 +4,13 @@ X User can mark tasks as completed
 X When task is completed it is striked out
 - Memory is persistent
 - It looks nice
-- User can add a new 'goals' box
+X User can add a new 'goals' box
 
 Checkbox logic
 if selected set box to filled and strike out, else keep it empty
 when enter is pressed add new textbox for tast
+
+Current issues
+- When all tasks are removed there is no way to re-add a task to the list
+  - solution: make it impossible to delete the last li in the ul
+- There is no way to delete a container

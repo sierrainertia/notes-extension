@@ -5,10 +5,8 @@
         <meta name="description" content="Fancy description..." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
-            rel="stylesheet"
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&family=Source+Sans+Pro:wght@400&display=swap" rel="stylesheet">
         <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
@@ -17,12 +15,22 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+        />
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <div class="wrapper">
-            <div class="notesContainer">
-                <h1 contenteditable="true">Don't worry you've got this!</h1>
+            <div id="notesContainer" class="notesContainer">
+                <div class="headerContainer">
+                    <div id="calendar">
+                        <span id="calendarHeader"></span>
+                        <span id="calendarDate"></span>
+                    </div>
+                    <h1 contenteditable="true">Don't worry you've got this!</h1>
+                </div>               
                 <div class="container">
                     <h2 contenteditable="true">Goals</h2>
                     <div class="taskBox">
@@ -64,193 +72,25 @@
                     </div>
                 </div>
                 <button id="addNewContainer" class="addNewContainer">
-                    <p>Add new list</p>
+                    <span class=" addButton material-symbols-outlined"> add_circle </span>
                 </button>
             </div>
 
             <div class="colourPicker">
-                <button class="colours colour1"></button>
-                <button class="colours colour2"></button>
-                <button class="colours colour3"></button>
+                <button
+                    id="colour1"
+                    class="colours colour1"
+                ></button>
+                <button
+                    id="colour2"
+                    class="colours colour2"
+                ></button>
+                <button
+                    id="colour3"
+                    class="colours colour3"
+                ></button>
             </div>
         </div>
-        <script>
-            let taskList;
-
-            function listItem(taskValue) {
-                // Create a new list item
-                const taskLi = document.createElement("li");
-                taskLi.className = "taskLi";
-
-                // Create span for checkbox and text for styling
-                const span = document.createElement("span");
-                span.className = "checkboxAndInputField";
-
-                // Create checkbox element
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-
-                // Create input element
-                const input = document.createElement("input");
-                input.type = "text";
-                input.value = taskValue;
-                input.className = "taskInputField";
-
-                // Adding checkbox and input to span
-                span.appendChild(checkbox);
-                span.appendChild(input);
-                taskLi.appendChild(span);
-
-                // Create delete button
-                const deleteButton = document.createElement("button");
-                deleteButton.className = "delete";
-                const trashCan = document.createElement("span");
-                trashCan.className = "material-symbols-rounded";
-                trashCan.textContent = "delete";
-                deleteButton.appendChild(trashCan);
-
-                taskLi.appendChild(deleteButton);
-
-                function attachDeleteListener() {
-                    deleteButton.addEventListener("click", function () {
-                        // Remove the parent <li> element from the DOM
-                        if (taskLi.parentNode.children.length > 1) {
-                            taskLi.parentNode.removeChild(taskLi);
-                        }
-                    });
-                }
-
-                attachDeleteListener();
-
-                return taskLi;
-            }
-
-            function attachEventListenersToInputs() {
-                const taskInputFields =
-                    document.querySelectorAll(".taskInputField");
-                const deleteButtons = document.querySelectorAll(".delete");
-
-                for (let i = 0; i < taskInputFields.length; i++) {
-                    taskInputFields[i].addEventListener(
-                        "keyup",
-                        function (event) {
-                            if (event.keyCode === 13) {
-                                event.preventDefault();
-                                addTask();
-                            }
-                        }
-                    );
-                }
-
-                for (let i = 0; i < deleteButtons.length; i++) {
-                    deleteButtons[i].addEventListener("click", function () {
-                        const taskLi = deleteButtons[i].closest(".taskLi");
-                        // Check if it is the last item
-                        if (taskLi.parentNode.children.length > 1) {
-                            // Remove the parent <li> element from the DOM
-                            taskLi.parentNode.removeChild(taskLi);
-                        } else {
-                            alert("Cannot delete the last item.");
-                        }
-                    });
-                }
-            }
-
-            function attachContainerDeleteListener(containerDiv) {
-                const containerDeleteButton = containerDiv.querySelector(
-                    ".containerDeleteButton"
-                );
-                containerDeleteButton.addEventListener("click", function () {
-                    containerDiv.parentNode.removeChild(containerDiv);
-                });
-            }
-
-            function addNewContainer() {
-                const containerDiv = document.createElement("div");
-                containerDiv.className = "container";
-
-                const buttonContainer = document.createElement("div");
-                buttonContainer.className = "buttonContainer";
-
-                const containerDeleteButton = document.createElement("button");
-                containerDeleteButton.className = "containerDeleteButton";
-                const x = document.createElement("span");
-                x.className = "material-symbols-rounded";
-                x.textContent = "close";
-
-                containerDeleteButton.appendChild(x);
-                buttonContainer.appendChild(containerDeleteButton);
-                containerDiv.appendChild(buttonContainer);
-
-                attachContainerDeleteListener(containerDiv);
-
-                const h2 = document.createElement("h2");
-                h2.textContent = "Enter Text";
-                h2.contentEditable = "true";
-
-                containerDiv.appendChild(h2);
-
-                const taskBoxDiv = document.createElement("div");
-                taskBoxDiv.className = "taskBox";
-
-                const ul = document.createElement("ul");
-                ul.className = "taskList";
-
-                // Create three list items using listItem function and add them to the ul
-                for (let i = 0; i < 3; i++) {
-                    const taskLi = listItem("");
-                    ul.appendChild(taskLi);
-                }
-
-                taskBoxDiv.appendChild(ul);
-                containerDiv.appendChild(taskBoxDiv);
-
-                const wrapper = document.querySelector(".wrapper");
-                wrapper.appendChild(containerDiv);
-
-                const addNewContainerButton =
-                    document.getElementById("addNewContainer");
-                wrapper.insertBefore(containerDiv, addNewContainerButton);
-
-                attachEventListenersToInputs();
-            }
-
-            function addTask() {
-                const taskInputField = document.activeElement;
-                const taskInputFieldValue = taskInputField.value.trim();
-
-                if (taskInputFieldValue === "") {
-                    return;
-                }
-
-                const taskLi = listItem(taskInputFieldValue);
-
-                // Find the parent <ul> element of the active task input
-                const ul = taskInputField.closest("ul");
-
-                // Insert the new taskLi after the active task input's parent <li> element
-                ul.insertBefore(
-                    taskLi,
-                    taskInputField.closest("li").nextSibling
-                );
-
-                // Clear the input field
-                taskInputField.value = "";
-                // Focus on the input field
-                taskInputField.focus();
-            }
-
-            const newContainer = document.getElementById("addNewContainer");
-            newContainer.addEventListener("click", function () {
-                console.log("you made it here");
-                event.preventDefault();
-                addNewContainer();
-            });
-
-            // Assign taskList variable after the DOM is loaded
-            window.addEventListener("DOMContentLoaded", function () {
-                attachEventListenersToInputs(); // Attach event listeners to the existing inputs
-            });
-        </script>
+        <script src="script.js"></script>
     </body>
 </html>
